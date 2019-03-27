@@ -1,0 +1,18 @@
+<idea-plugin>
+  <change-notes>
+      Add change notes here.&lt;br&gt;
+      &lt;em&gt;most HTML tags may be used&lt;/em&gt;</change-notes>
+  <idea-version since-build="183.6156" until-build="183.*"/>
+  <id>org.jetbrains</id>
+  <name>Hello Action Project</name>
+  <version>1.0</version>
+  <vendor email="dummy" url="dummy">dummy</vendor>
+  <depends>com.intellij.modules.lang</depends>
+  <extensions defaultExtensionNs="com.intellij"/>
+  <actions>
+    <group id="MyPlugin.SampleMenu" text="Greeting" description="Greeting menu">
+      <add-to-group group-id="MainMenu" anchor="last"/>
+      <action id="Myplugin.Textboxes" class="HelloAction" text="Hello" description="Says hello"/>
+    </group>
+  </actions>
+</idea-plugin>
