@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="myToolWindow.TrikToolWindow">
+  <grid id="27dc6" binding="myToolWindowContent" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="16" y="17" width="341" height="42"/>
+    </constraints>
+    <properties>
+      <enabled value="true"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <component id="f77f1" class="javax.swing.JButton" binding="SaveButton">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false">
+            <minimum-size width="40" height="38"/>
+            <preferred-size width="40" height="38"/>
+            <maximum-size width="40" height="38"/>
+          </grid>
+        </constraints>
+        <properties>
+          <borderPainted value="true"/>
+          <contentAreaFilled value="false"/>
+          <enabled value="true"/>
+          <hideActionText value="false"/>
+          <icon value="META-INF/icons/saveicon.png"/>
+          <text value=""/>
+        </properties>
+        <clientProperties>
+          <hideActionText class="java.lang.Boolean" value="false"/>
+          <html.disable class="java.lang.Boolean" value="false"/>
+        </clientProperties>
+      </component>
+      <component id="94926" class="javax.swing.JLabel" binding="Greeting">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <doubleBuffered value="false"/>
+          <opaque value="false"/>
+          <requestFocusEnabled value="true"/>
+          <text value="Welcome to Trik Plugin!"/>
+        </properties>
+      </component>
+      <component id="f99e9" class="javax.swing.JButton" binding="RunButton">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false">
+            <minimum-size width="40" height="38"/>
+            <preferred-size width="38" height="38"/>
+            <maximum-size width="40" height="38"/>
+          </grid>
+        </constraints>
+        <properties>
+          <borderPainted value="true"/>
+          <contentAreaFilled value="true"/>
+          <icon value="META-INF/icons/runicon.png"/>
+          <text value=""/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
