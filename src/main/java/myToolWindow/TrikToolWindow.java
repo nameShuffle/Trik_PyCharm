@@ -8,9 +8,10 @@ public class TrikToolWindow {
     private JPanel myToolWindowContent;
     private JButton SaveButton;
     private JButton RunButton;
-    private JLabel Greeting;
+    private JTable table1;
 
     public TrikToolWindow(ToolWindow toolWindow) {
+
     }
 
     public JPanel getContent() {
