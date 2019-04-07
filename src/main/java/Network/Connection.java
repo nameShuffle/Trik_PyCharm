@@ -13,6 +13,11 @@ public class Connection {
     private DataOutputStream out = null;
 
     /** Class provides simple instruments for communication with TRIK.
+     */
+    public Connection() {
+    }
+
+    /**
      * @param address Address of a TRIK server.
      * @param port Port that the TRIK server hears.
      */
@@ -24,30 +29,21 @@ public class Connection {
     /**
      * Connect with a TRIK.
      */
-    private void Connect() throws IOException {
-        try {
-            socket = new Socket(address, port);
-            System.out.println("Connected to " + address + " on port " + port);
+    private void connect() throws IOException {
+        socket = new Socket(address, port);
+        System.out.println("Connected to " + address + " on port " + port);
 
-            out = new DataOutputStream(socket.getOutputStream());
-            input = new DataInputStream(socket.getInputStream());
-        } catch(IOException ioEx) {
-            throw ioEx;
-        }
+        out = new DataOutputStream(socket.getOutputStream());
+        input = new DataInputStream(socket.getInputStream());
     }
 
     /**
-     * Disconnect from a TRIK.
+     * disconnect from a TRIK.
      */
-    private void Disconnect() throws IOException {
-        try {
-            input.close();
-            out.close();
-            socket.close();
-        }
-        catch(IOException ioEx) {
-            throw ioEx;
-        }
+    private void disconnect() throws IOException {
+        input.close();
+        out.close();
+        socket.close();
     }
 
     /**
@@ -56,7 +52,7 @@ public class Connection {
      * @return
      * @throws IOException
      */
-    private String SendAndReceive(String command)  throws IOException{
+    private String sendAndReceive(String command)  throws IOException{
         String receivedString;
 
         try {
@@ -81,11 +77,11 @@ public class Connection {
      * - direct:<command> --- execute given script without saving it to a file.
      * - keepalive --- do nothing, used to check the availability of connection.
      * @param commandType One of the commands defined above.
-     * @param commandContents
+     * @param commandContents Contents of a command.
      */
-    public void DoCommand(String commandType, String commandContents) {
+    public void doCommand(String commandType, String commandContents) {
         try {
-            Connect();
+            connect();
         }
         catch (IOException ioEx) {
             System.out.println(ioEx);
@@ -97,7 +93,7 @@ public class Connection {
         command = command.length() + ":" + command;
 
         try {
-           String answer =  SendAndReceive(command);
+           String answer =  sendAndReceive(command);
 
            System.out.println(answer);
         }
@@ -107,10 +103,33 @@ public class Connection {
         }
 
         try {
-            Disconnect();
+            disconnect();
         }
         catch (IOException ioEx) {
             System.out.println(ioEx);
         }
+    }
+
+    /**
+     * Setter and getter for address.
+     */
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * Setter and getter for port.
+     */
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public int getPort() {
+        return port;
     }
 }
