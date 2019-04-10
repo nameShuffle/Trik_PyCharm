@@ -7,7 +7,7 @@
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="Trik PLugin" secondary="true" anchor="right" factoryClass="myToolWindow.TrikToolWindowFactory"/>
+        <toolWindow id="TRIK PLugin" secondary="true" anchor="right" factoryClass="View.ViewFactory"/>
     </extensions>
 
 </idea-plugin>

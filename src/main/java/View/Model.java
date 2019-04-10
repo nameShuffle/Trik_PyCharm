@@ -1,4 +1,7 @@
-package Model;
+package View;
+
+import javax.swing.table.TableModel;
+import java.util.ArrayList;
 
 public class Model {
     private String address
