@@ -5,7 +5,6 @@ import com.intellij.openapi.wm.ToolWindow;
 import javax.swing.*;
 import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 
 public class View {
     private JPanel myToolWindowContent;

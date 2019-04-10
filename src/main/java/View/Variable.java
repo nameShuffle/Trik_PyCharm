@@ -1,5 +1,10 @@
 package View;
 
+/**
+ * The class for variable with two fields:
+ *  - name of variable
+ *  - current value of variable
+ */
 public class Variable {
     private String name;
     private String value;

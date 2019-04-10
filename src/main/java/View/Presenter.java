@@ -1,6 +1,12 @@
 package View;
 
 import Network.Connection;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.vfs.VirtualFile;
 
 import javax.swing.table.TableModel;
 import java.util.ArrayList;
@@ -17,14 +23,22 @@ public class Presenter {
         this.model = model;
     }
 
+    /**
+     * Creates a command for sending current opened file to robot.
+     */
     public void sendFileToRobot() {
-        ///TODO
-        Helper.FileManager fileManager = new Helper.FileManager();
+        Project[] projects = ProjectManager.getInstance().getOpenProjects();
 
-        String fileContents;
+        Document currentDocument = FileEditorManager.getInstance(projects[0]).getSelectedTextEditor().getDocument();
+        VirtualFile currentFile = FileDocumentManager.getInstance().getFile(currentDocument);
+
+        String fileContent = currentDocument.getText();
+        String fileName = currentFile.getName();
+
+        String command = fileName + ':' + fileContent;
 
         Connection connection = new Connection(model.getAddress(), model.getPort());
-
+        connection.doCommand("file", command);
     }
 
     public void runProgramOnRobot() {
