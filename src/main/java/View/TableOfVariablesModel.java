@@ -7,6 +7,9 @@ import javax.swing.table.TableModel;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * TableModel for Table of variables.
+ */
 public class TableOfVariablesModel implements TableModel {
 
     private Set<TableModelListener> listeners = new HashSet<TableModelListener>();
@@ -14,6 +17,7 @@ public class TableOfVariablesModel implements TableModel {
     private List<Variable> currentVariables;
 
     public TableOfVariablesModel() { }
+
 
     public TableOfVariablesModel(List<Variable> variables) {
         this.currentVariables = variables;

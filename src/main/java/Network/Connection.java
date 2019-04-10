@@ -70,7 +70,7 @@ public class Connection {
 
     /**
      * Send a command to robot.
-     * There are 5 commands:
+     * There are 5 types of command:
      * - file:<file name>:<file contents> --- save given contents to a file with given name in current directory.
      * - run:<file name> --- execute a file with given name.
      * - stop --- stop current script execution and a robot.
