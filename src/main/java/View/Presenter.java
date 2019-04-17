@@ -1,12 +1,6 @@
 package View;
 
 import Network.Connection;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.vfs.VirtualFile;
 
 import javax.swing.table.TableModel;
 import java.util.ArrayList;
@@ -24,29 +18,42 @@ public class Presenter {
     }
 
     /**
-     * Creates a command for sending current opened file to robot.
+     * Sends command to a robot.
+     * @param commandType Type of the command.
+     * @param command Command data.
+     */
+    private void sendCommand(String commandType, String command) {
+        Connection connection = new Connection(model.getAddress(), model.getPort());
+
+        connection.sendCommand(commandType, command);
+    }
+
+    /**
+     * Creates a command for sending current opened file to a robot.
      */
     public void sendFileToRobot() {
-        Project[] projects = ProjectManager.getInstance().getOpenProjects();
+        String fileName = model.getCurrentFileName();
+        String fileContents = model.getCurrentFileContents();
 
-        Document currentDocument = FileEditorManager.getInstance(projects[0]).getSelectedTextEditor().getDocument();
-        VirtualFile currentFile = FileDocumentManager.getInstance().getFile(currentDocument);
+        String command = fileName + ":" + fileContents;
 
-        String fileContent = currentDocument.getText();
-        String fileName = currentFile.getName();
-
-        String command = fileName + ':' + fileContent;
-
-        Connection connection = new Connection(model.getAddress(), model.getPort());
-        connection.doCommand("file", command);
+        sendCommand("file", command);
     }
 
+    /**
+     * Runs opened file on a robot.
+     */
     public void runProgramOnRobot() {
+        String command = model.getCurrentFileName();
 
+        sendCommand("run", command);
     }
 
+    /**
+     * Stops a script execution on a robot.
+     */
     public void stopExecutingProgramOnRobot() {
-
+        sendCommand("stop", "");
     }
 
     public void initializeTable()
@@ -73,6 +80,4 @@ public class Presenter {
     public void changeDataInTable() {
         //меняем значения уже имеющихся в таблице переменных
     }
-
-
 }

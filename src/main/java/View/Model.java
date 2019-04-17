@@ -1,7 +1,11 @@
 package View;
 
-import javax.swing.table.TableModel;
-import java.util.ArrayList;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.vfs.VirtualFile;
 
 public class Model {
     private String address
@@ -9,21 +13,40 @@ public class Model {
     private int port
             = 8888;
 
-    private String pathToFile
-            = "";
-
-    private String currentFile
-            = "default_file.py";
+    private Document currentDocument;
 
     public Model() {
+        updateCurrentDocument();
     }
 
-    public void setCurrentFile(String currentFile) {
-        this.currentFile = currentFile;
+
+    /**
+     * Sets currentDocument as a current opened file.
+     */
+    private void updateCurrentDocument() {
+        Project[] projects = ProjectManager.getInstance().getOpenProjects();
+
+        currentDocument = FileEditorManager.getInstance(projects[0]).getSelectedTextEditor().getDocument();
     }
 
-    public String getCurrentFile() {
-        return this.currentFile;
+    /**
+     * @return a current opened file name.
+     */
+    public String getCurrentFileName() {
+        updateCurrentDocument();
+
+        VirtualFile currentFile = FileDocumentManager.getInstance().getFile(currentDocument);
+
+        return currentFile.getName();
+    }
+
+    /**
+     * @return a current opened file contents.
+     */
+    public String getCurrentFileContents() {
+        updateCurrentDocument();
+
+        return currentDocument.getText();
     }
 
     public void setAddress(String address) {
@@ -40,9 +63,5 @@ public class Model {
 
     public int getPort() {
         return this.port;
-    }
-
-    public String getPathToFile() {
-        return pathToFile;
     }
 }
