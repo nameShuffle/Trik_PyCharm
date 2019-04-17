@@ -56,7 +56,7 @@ public class Connection {
         String receivedString;
 
         try {
-            out.writeUTF(command);
+            out.writeBytes(command);
 
             receivedString = input.readUTF();
         }
@@ -79,7 +79,7 @@ public class Connection {
      * @param commandType One of the commands defined above.
      * @param commandContents Contents of a command.
      */
-    public void doCommand(String commandType, String commandContents) {
+    public void sendCommand(String commandType, String commandContents) {
         try {
             connect();
         }
@@ -89,8 +89,16 @@ public class Connection {
             return;
         }
 
-        String command = commandType + ":" + commandContents;
+        String command;
+        if (commandContents.equals("")) {
+            command = commandType;
+        }
+        else {
+            command = commandType + ":" + commandContents;
+        }
+
         command = command.length() + ":" + command;
+        System.out.println("Command: " + command);
 
         try {
            String answer =  sendAndReceive(command);
