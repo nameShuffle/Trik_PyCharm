@@ -1,8 +1,9 @@
 package View;
 
-import Network.Connection;
+import Network.RobotConnection;
 
 import javax.swing.table.TableModel;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -23,9 +24,15 @@ public class Presenter {
      * @param command Command data.
      */
     private void sendCommand(String commandType, String command) {
-        Connection connection = new Connection(model.getAddress(), model.getPort());
+        RobotConnection connection = new RobotConnection(model.getAddress(), model.getPort());
 
-        connection.sendCommand(commandType, command);
+        try {
+            connection.sendCommand(commandType, command);
+        }
+        catch(IOException ioEx)
+        {
+            System.out.println(ioEx);
+        }
     }
 
     /**
