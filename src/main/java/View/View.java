@@ -12,45 +12,50 @@ public class View {
     private JButton StopButton;
     private JButton SaveButton;
     private JTable TableOfVariables;
-    private JButton submitButton;
     private JTextField portTextField;
     private JTextField addressTextField;
 
     private Presenter presenter;
 
-    public View(ToolWindow toolWindow) {
+    View(ToolWindow toolWindow) {
         addListenersToButtons();
     }
 
-    public void setPresenter (Presenter presenter) {
+    void setPresenter(Presenter presenter) {
         this.presenter = presenter;
     }
 
-    public JPanel getContent() {
+    JPanel getContent() {
         return myToolWindowContent;
     }
 
     private void addListenersToButtons(){
-        this.SaveButton.addActionListener((ActionEvent e) ->
-                presenter.sendFileToRobot()
-        );
-
-        this.RunButton.addActionListener((ActionEvent e) ->
-                presenter.runProgramOnRobot()
-        );
-
-        this.StopButton.addActionListener((ActionEvent e) ->
-                presenter.stopExecutingProgramOnRobot()
-        );
-
-        this.submitButton.addActionListener((ActionEvent e) -> {
+        this.SaveButton.addActionListener((ActionEvent e) -> {
                     presenter.setAddress(addressTextField.getText());
                     presenter.setPort(portTextField.getText());
+
+                    presenter.sendFileToRobot();
+               }
+        );
+
+        this.RunButton.addActionListener((ActionEvent e) -> {
+                    presenter.setAddress(addressTextField.getText());
+                    presenter.setPort(portTextField.getText());
+
+                    presenter.runProgramOnRobot();
+                }
+        );
+
+        this.StopButton.addActionListener((ActionEvent e) -> {
+                    presenter.setAddress(addressTextField.getText());
+                    presenter.setPort(portTextField.getText());
+
+                    presenter.stopExecutingProgramOnRobot();
                 }
         );
     }
 
-    public void setTableModelToTable(TableModel model)
+    void setTableModelToTable(TableModel model)
     {
         this.TableOfVariables.setModel(model);
     }
