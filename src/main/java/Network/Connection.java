@@ -48,21 +48,14 @@ public class Connection {
 
     /**
      * This method
-     * @param command
-     * @return
-     * @throws IOException
+     * @param command Command that should be sent.
+     * @return Received string.
      */
     private String sendAndReceive(String command)  throws IOException{
-        String receivedString;
+        String receivedString = "empty";
 
-        try {
-            out.writeBytes(command);
-
-            receivedString = input.readUTF();
-        }
-        catch(IOException ioEx) {
-            throw ioEx;
-        }
+        out.writeBytes(command);
+        // receivedString = input.readUTF();
 
         return receivedString;
     }
@@ -74,17 +67,15 @@ public class Connection {
      * - file:<file name>:<file contents> --- save given contents to a file with given name in current directory.
      * - run:<file name> --- execute a file with given name.
      * - stop --- stop current script execution and a robot.
-     * - direct:<command> --- execute given script without saving it to a file.
      * - keepalive --- do nothing, used to check the availability of connection.
      * @param commandType One of the commands defined above.
      * @param commandContents Contents of a command.
      */
-    public void sendCommand(String commandType, String commandContents) {
+    public void sendCommand(String commandType, String commandContents) throws IOException {
         try {
             connect();
         }
         catch (IOException ioEx) {
-            System.out.println(ioEx);
 
             return;
         }
@@ -105,16 +96,8 @@ public class Connection {
 
            System.out.println(answer);
         }
-        catch (IOException ioEx) {
-            System.out.println(ioEx);
-            return;
-        }
-
-        try {
+        finally {
             disconnect();
-        }
-        catch (IOException ioEx) {
-            System.out.println(ioEx);
         }
     }
 

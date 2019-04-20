@@ -80,4 +80,12 @@ public class Presenter {
     public void changeDataInTable() {
         //меняем значения уже имеющихся в таблице переменных
     }
+
+    public void setAddress(String address) {
+        model.setAddress(address);
+    }
+
+    public void setPort(String port) {
+        model.setPort(Integer.parseInt(port));
+    }
 }
