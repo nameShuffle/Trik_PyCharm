@@ -14,22 +14,7 @@ public class RobotConnection extends Connection {
 
 
     /**
-     * This method
-     * @param command Command that should be sent.
-     * @return Received string.
-     */
-    private String sendAndReceive(String command)  throws IOException{
-        String receivedString = "empty";
-
-        output.writeBytes(command);
-        // receivedString = input.readUTF();
-
-        return receivedString;
-    }
-
-
-    /**
-     * Send a command to robot.
+     * Send a command to a robot.
      * There are 5 types of command:
      * - file:<file name>:<file contents> --- save given contents to a file with given name in current directory.
      * - run:<file name> --- execute a file with given name.
@@ -38,33 +23,24 @@ public class RobotConnection extends Connection {
      * @param commandType One of the commands defined above.
      * @param commandContents Contents of a command.
      */
-    public void sendCommand(String commandType, String commandContents) throws IOException {
-        try {
-            connect();
-        }
-        catch (IOException ioEx) {
+    public void sendCommand(String commandType, String commandContents){
+        String command = commandType;
 
-            return;
-        }
-
-        String command;
-        if (commandContents.equals("")) {
-            command = commandType;
-        }
-        else {
-            command = commandType + ":" + commandContents;
+        if (!commandContents.equals("")) {
+            command += ":" + commandContents;
         }
 
         command = command.length() + ":" + command;
         System.out.println("Command: " + command);
 
         try {
-            String answer =  sendAndReceive(command);
-
-            System.out.println(answer);
+            output.writeUTF(command);
         }
-        finally {
-            disconnect();
+        catch (IOException ioEx)
+        {
+            ioEx.printStackTrace();
+
+            System.out.println(ioEx.toString());
         }
     }
 }
