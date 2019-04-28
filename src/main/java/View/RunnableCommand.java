@@ -3,9 +3,11 @@ package View;
 import Async.AsyncExecutor;
 import Network.Command;
 import Network.RobotConnection;
+import org.apache.commons.io.IOUtils;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Provides tasks for the commands.
@@ -25,16 +27,83 @@ public class RunnableCommand implements Runnable{
      * Provides differents tasks according to the commands.
      */
     public void run() {
-        sendCommandTask();
+        switch (this.command.getType()) {
+            case "file":
+                sendFileCommandTask();
+
+                break;
+            case "run":
+                runCommandTask();
+
+                break;
+
+        }
     }
 
 
     /**
+     * Task for the run command;
+     */
+    private void runCommandTask() {
+        String address = model.getAddress();
+        int port = model.getPort();
+
+        RobotConnection fileCommandConnection = new RobotConnection(address, port);
+        try {
+            fileCommandConnection.connect();
+        }
+        catch (IOException ioEx) {
+            ioEx.printStackTrace();
+            System.out.println(ioEx.toString());
+
+            return;
+        }
+
+        fileCommandConnection.sendCommand(new Command("file", this.command.getContents().split(":")[1]));
+
+        DataInputStream fileInput = fileCommandConnection.getInput();
+
+        try {
+            String result = IOUtils.toString(fileInput, StandardCharsets.UTF_8);
+        }
+        catch (IOException ioEx) {
+            ioEx.printStackTrace();
+            System.out.println(ioEx.toString());
+
+            return;
+        }
+
+        RobotConnection runCommandConnection = new RobotConnection(address, port);
+
+        try {
+            runCommandConnection.connect();
+        }
+        catch (IOException ioEx) {
+            ioEx.printStackTrace();
+            System.out.println(ioEx.toString());
+
+            return;
+        }
+
+        runCommandConnection.sendCommand(command);
+        
+        DataInputStream runInput = runCommandConnection.getInput();
+        try {
+            String result = IOUtils.toString(runInput, StandardCharsets.UTF_8);
+
+            System.out.println(result);
+        }
+        catch (IOException ioEx) {
+            ioEx.printStackTrace();
+            System.out.println(ioEx.toString());
+        }
+    }
+
+    /**
      * Task for the file command.
      */
-    private void sendCommandTask() {
+    private void sendFileCommandTask() {
         RobotConnection robotConnection = new RobotConnection(model.getAddress(), model.getPort());
-
         try {
             robotConnection.connect();
         }
@@ -45,8 +114,17 @@ public class RunnableCommand implements Runnable{
             return;
         }
 
-        DataInputStream input = robotConnection.getInput();
-
         robotConnection.sendCommand(this.command);
+
+        DataInputStream input = robotConnection.getInput();
+        try {
+            String result = IOUtils.toString(input, StandardCharsets.UTF_8);
+
+            System.out.println(result);
+        }
+        catch (IOException ioEx) {
+            ioEx.printStackTrace();
+            System.out.println(ioEx.toString());
+        }
     }
 }

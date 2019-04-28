@@ -35,6 +35,6 @@ public class Command {
     }
 
     public int getLength() {
-        return length;
+        return this.length;
     }
 }

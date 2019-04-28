@@ -44,7 +44,7 @@ public class Presenter {
      * Runs opened file on a robot.
      */
     public void runProgramOnRobot() {
-        manageCommandAsync(new Command("direct", model.getCurrentFileName()));
+        manageCommandAsync(new Command("direct", model.getCurrentFileContents()));
     }
 
     /**

@@ -23,7 +23,7 @@ public class RobotConnection extends Connection {
      */
     public void sendCommand(Command command){
         try {
-            output.writeUTF(command.getFull());
+            output.writeBytes(command.getFull());
         }
         catch (IOException ioEx)
         {
