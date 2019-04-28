@@ -11,30 +11,19 @@ public class RobotConnection extends Connection {
         super(address, port);
     }
 
-
-
     /**
      * Send a command to a robot.
      * There are 5 types of command:
      * - file:<file name>:<file contents> --- save given contents to a file with given name in current directory.
      * - run:<file name> --- execute a file with given name.
      * - stop --- stop current script execution and a robot.
+     * - direct:<command> --- execute given script without saving it to a file.
      * - keepalive --- do nothing, used to check the availability of connection.
-     * @param commandType One of the commands defined above.
-     * @param commandContents Contents of a command.
+     * @param command requested command.
      */
-    public void sendCommand(String commandType, String commandContents){
-        String command = commandType;
-
-        if (!commandContents.equals("")) {
-            command += ":" + commandContents;
-        }
-
-        command = command.length() + ":" + command;
-        System.out.println("Command: " + command);
-
+    public void sendCommand(Command command){
         try {
-            output.writeUTF(command);
+            output.writeUTF(command.getFull());
         }
         catch (IOException ioEx)
         {

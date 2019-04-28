@@ -14,7 +14,7 @@ public class AsyncExecutor {
     }
 
     /**
-     * Runs a runnable task      asynchronously.
+     * Runs a runnable task asynchronously.
      * @param task Runnable task.
      */
     public void execute(Runnable task) {

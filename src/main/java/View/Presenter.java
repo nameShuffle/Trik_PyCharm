@@ -1,10 +1,9 @@
 package View;
 
 import Async.AsyncExecutor;
-import Network.RobotConnection;
+import Network.Command;
 
 import javax.swing.table.TableModel;
-import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -17,25 +16,6 @@ public class Presenter {
     private final int numberOfThreads = 10;
     private AsyncExecutor asyncExecutor = new AsyncExecutor(numberOfThreads);
 
-    /**
-     * This runnable declares task for file command.
-     */
-    private Runnable runnableFileTask = () -> {
-        RobotConnection robotConnection = new RobotConnection(model.getAddress(), model.getPort());
-
-        try {
-            robotConnection.connect();
-        }
-        catch (IOException ioEx) {
-            ioEx.printStackTrace();
-            System.out.println(ioEx.toString());
-
-            return;
-        }
-
-        //TODO: Add sending and disconnecting.
-    };
-
     public Presenter(View view, Model model) {
         this.view = view;
         this.model = model;
@@ -43,13 +23,9 @@ public class Presenter {
 
     /**
      * Sends command to a robot.
-     * @param commandType Type of the command.
-     * @param command Command data.
      */
-    private void manageCommandAsync(String commandType, String command) {
-        RobotConnection connection = new RobotConnection(model.getAddress(), model.getPort());
-
-        connection.sendCommand(commandType, command);
+    private void manageCommandAsync(Command command) {
+        asyncExecutor.execute(new TaskFactory(command, asyncExecutor, model));
     }
 
     /**
@@ -59,25 +35,23 @@ public class Presenter {
         String fileName = model.getCurrentFileName();
         String fileContents = model.getCurrentFileContents();
 
-        String command = fileName + ":" + fileContents;
+        String commandContents = fileName + ":" + fileContents;
 
-        manageCommandAsync("file", command);
+        manageCommandAsync(new Command("file", commandContents));
     }
 
     /**
      * Runs opened file on a robot.
      */
     public void runProgramOnRobot() {
-        String command = model.getCurrentFileName();
-
-        manageCommandAsync("run", command);
+        manageCommandAsync(new Command("direct", model.getCurrentFileName()));
     }
 
     /**
      * Stops a script execution on a robot.
      */
     public void stopExecutingProgramOnRobot() {
-        manageCommandAsync("stop", "");
+        manageCommandAsync(new Command("stop", ""));
     }
 
     public void initializeTable()
