@@ -22,10 +22,10 @@ public class Presenter {
     }
 
     /**
-     * Sends command to a robot.
+     * Sends command to a robot asynchronously.
      */
     private void manageCommandAsync(Command command) {
-        asyncExecutor.execute(new TaskFactory(command, asyncExecutor, model));
+        asyncExecutor.execute(new RunnableCommand(command, asyncExecutor, model));
     }
 
     /**
