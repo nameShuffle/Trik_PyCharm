@@ -24,6 +24,8 @@ public class RobotConnection extends Connection {
     public void sendCommand(Command command){
         try {
             output.writeBytes(command.getFull());
+
+            System.out.println(command.getFull());
         }
         catch (IOException ioEx)
         {

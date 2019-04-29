@@ -28,15 +28,16 @@ public class RunnableCommand implements Runnable{
      */
     public void run() {
         switch (this.command.getType()) {
+            case "stop":
             case "file":
-                sendFileCommandTask();
+                commonCommandTask();
 
                 break;
+
             case "run":
                 runCommandTask();
 
                 break;
-
         }
     }
 
@@ -59,12 +60,14 @@ public class RunnableCommand implements Runnable{
             return;
         }
 
-        fileCommandConnection.sendCommand(new Command("file", this.command.getContents().split(":")[1]));
+        fileCommandConnection.sendCommand(new Command("file", command.getContents()));
 
         DataInputStream fileInput = fileCommandConnection.getInput();
 
         try {
             String result = IOUtils.toString(fileInput, StandardCharsets.UTF_8);
+
+            System.out.println(result);
         }
         catch (IOException ioEx) {
             ioEx.printStackTrace();
@@ -85,7 +88,7 @@ public class RunnableCommand implements Runnable{
             return;
         }
 
-        runCommandConnection.sendCommand(command);
+        runCommandConnection.sendCommand(new Command(command.getType(), command.getContents().split(":")[0]));
         
         DataInputStream runInput = runCommandConnection.getInput();
         try {
@@ -102,7 +105,7 @@ public class RunnableCommand implements Runnable{
     /**
      * Task for the file command.
      */
-    private void sendFileCommandTask() {
+    private void commonCommandTask() {
         RobotConnection robotConnection = new RobotConnection(model.getAddress(), model.getPort());
         try {
             robotConnection.connect();
