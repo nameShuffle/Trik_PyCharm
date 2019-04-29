@@ -1,6 +1,10 @@
 package Network;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This class provides methods for sending commands to a trik-robot and receiving answers.
@@ -33,5 +37,11 @@ public class RobotConnection extends Connection {
 
             System.out.println(ioEx.toString());
         }
+    }
+
+    public void connectAndSend(Command command) throws IOException{
+        connect();
+
+        sendCommand(command);
     }
 }

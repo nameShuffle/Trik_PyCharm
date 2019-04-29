@@ -2,8 +2,14 @@ package View;
 
 import Async.AsyncExecutor;
 import Network.Command;
+import Network.RobotConnection;
+import View.View.StopRunner;
+import org.apache.commons.io.IOUtils;
 
 import javax.swing.table.TableModel;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 
@@ -25,7 +31,11 @@ public class Presenter {
      * Sends command to a robot asynchronously.
      */
     private void manageCommandAsync(Command command) {
-        asyncExecutor.execute(new RunnableCommand(command, asyncExecutor, model));
+        if (command.getType().equals("run")) {
+            view.lockRunButtonAndTextFields();
+        }
+
+        asyncExecutor.execute(new RunnableCommand(command));
     }
 
     /**
@@ -90,5 +100,90 @@ public class Presenter {
 
     public void setPort(String port) {
         model.setPort(Integer.parseInt(port));
+    }
+
+    /**
+     * Provides tasks for the commands.
+     */
+    public class RunnableCommand implements Runnable{
+        private Command command;
+
+        public RunnableCommand(Command command) {
+            this.command = command;
+        }
+
+        /**
+         * Provides differents tasks according to the commands.
+         */
+        public void run() {
+            switch (this.command.getType()) {
+                case "file":
+                case "stop":
+                    commonCommandTask();
+
+                    break;
+                case "run":
+                    runCommandTask();
+
+                    break;
+            }
+        }
+
+
+        /**
+         * Task for the run command;
+         */
+        private void runCommandTask() {
+            String address = model.getAddress();
+            int port = model.getPort();
+
+            try {
+                connect(address, port, new Command("file", command.getContents()));
+
+                connect(address, port, new Command("run", command.getContents().split(":")[0]));
+            }
+            catch (IOException ioEx) {
+                ioEx.printStackTrace();
+                System.out.println(ioEx.toString());
+            }
+            finally {
+                (view.new StopRunner()).execute();
+
+            }
+        }
+
+        /**
+         * Task for the file command.
+         */
+        private void commonCommandTask() {
+            try {
+                connect(model.getAddress(), model.getPort(), this.command);
+            }
+            catch (IOException ioEx) {
+                ioEx.printStackTrace();
+                System.out.println(ioEx.toString());
+            }
+            finally {
+                (view.new StopRunner()).execute();
+            }
+
+        }
+
+        /**
+         * Connects and sends command to a robot.
+         * @return A robot request.
+         */
+        private String connect(String address, int port, Command command) throws IOException {
+            RobotConnection fileCommandConnection = new RobotConnection(address, port);
+
+            fileCommandConnection.connectAndSend(command);
+
+            DataInputStream fileInput = fileCommandConnection.getInput();
+            String result = IOUtils.toString(fileInput, StandardCharsets.UTF_8);
+
+            System.out.println(result);
+
+            return result;
+        }
     }
 }
