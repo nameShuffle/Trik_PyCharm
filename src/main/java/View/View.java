@@ -59,4 +59,28 @@ public class View {
     {
         this.TableOfVariables.setModel(model);
     }
+
+    public void lockRunButtonAndTextFields() {
+        RunButton.setEnabled(false);
+        SaveButton.setEnabled(false);
+
+        addressTextField.setEditable(false);
+        portTextField.setEditable(false);
+    }
+
+
+    /**
+     * Class provides instruments to change the run button and the text fields in asynchronous mode.
+     */
+    public class StopRunner extends SwingWorker<Object, Object> {
+        public Object doInBackground() {
+            RunButton.setEnabled(true);
+            SaveButton.setEnabled(true);
+
+            addressTextField.setEditable(true);
+            portTextField.setEditable(true);
+
+            return new Object();
+        }
+    }
 }
